@@ -33,3 +33,4 @@ backend/target/
 backend/.mvn/wrapper/
 !**/src/main/**/target/
 !**/src/test/**/target/
+frontend/node_modules/
