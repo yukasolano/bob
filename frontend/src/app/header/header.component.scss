@@ -1,5 +1,13 @@
-.header {
-  position: absolute;
-  top: 0px;
-  height: 35px;
+.title {
+  font-size: 28px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.username {
+  font-size: 22px;
+  font-weight: 400;
+  margin-left: 3px;
 }
