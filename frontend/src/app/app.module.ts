@@ -7,7 +7,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from './material.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
 import { CoreModule } from './core/core.module';
 import { LoginModule } from './login/login.module';
 import { HomeModule } from './home/home.module';
