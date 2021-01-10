@@ -23,6 +23,7 @@ public class UserDAO {
         entity.setName(user.getName());
         entity.setUsername(user.getUsername());
         entity.setPassword(user.getPassword());
+        entity.setEmail(user.getEmail());
         userRepository.save(entity);
     }
 }

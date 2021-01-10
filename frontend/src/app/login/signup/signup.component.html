@@ -13,6 +13,14 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="login-field" appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input type="email" matInput formControlName="email" required />
+
+          <mat-error *ngIf="signupForm.get('email').errors?.required">
+            E-mail is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="login-field" appearance="outline">
           <mat-label>User name</mat-label>
           <input type="text" matInput formControlName="username" required />
 
