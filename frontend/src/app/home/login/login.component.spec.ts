@@ -10,24 +10,7 @@ import { Router } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { MessageService } from 'src/app/core/message/message.service';
-
-export const ButtonClickEvents = {
-  left: { button: 0 }, right: { button: 2 }
-};
-
-export function click(el: DebugElement | HTMLElement, eventObj: any = ButtonClickEvents.left) {
-  if (el instanceof HTMLElement) {
-    el.click();
-  } else {
-    el.triggerEventHandler('click', eventObj);
-  }
-}
-
-export function setInput(el: any, querySelector: string, value: string) {
-  const input = el.querySelector(querySelector);
-  input.value = value;
-  input.dispatchEvent(new Event('input'));
-}
+import { setInput, click } from 'src/testing/utilities';
 
 export function loginWith(fixture: ComponentFixture<LoginComponent>, username: string, password: string) {
   const loginElem = fixture.debugElement.nativeElement;
