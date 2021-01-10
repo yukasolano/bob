@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
-import { LoginModule } from './login/login.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -12,7 +12,7 @@ describe('AppComponent', () => {
         RouterTestingModule,
         CoreModule,
         HomeModule,
-        LoginModule
+        DashboardModule
       ],
       declarations: [
         AppComponent

@@ -6,10 +6,10 @@ import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { MessageService } from 'src/app/core/message/message.service';
 
 export const ButtonClickEvents = {
   left: { button: 0 }, right: { button: 2 }
@@ -44,13 +44,13 @@ describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let authServiceSpy;
-  let matSnackBarSpy;
+  let messageServiceSpy;
   let routerSpy;
 
   beforeEach(async(() => {
 
     authServiceSpy = jasmine.createSpyObj('AuthService', ['authenticate']);
-    matSnackBarSpy = jasmine.createSpyObj('MatSnakBar', ['open']);
+    messageServiceSpy = jasmine.createSpyObj('MessageService', ['showError']);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     TestBed.configureTestingModule({
@@ -62,7 +62,7 @@ describe('LoginComponent', () => {
       declarations: [LoginComponent],
       providers: [
         { provide: AuthService, useValue: authServiceSpy },
-        { provide: MatSnackBar, useValue: matSnackBarSpy },
+        { provide: MessageService, useValue: messageServiceSpy },
         { provide: Router, useValue: routerSpy }
       ],
       schemas: [NO_ERRORS_SCHEMA]
@@ -106,7 +106,7 @@ describe('LoginComponent', () => {
     it('should show error message', () => {
       const authenticate = authServiceSpy.authenticate.and.returnValue(throwError('Error'));
       loginWith(fixture, 'username', 'password');
-      expect(matSnackBarSpy.open).toHaveBeenCalledWith('Authentication failed.', 'Close', Object({ duration: 2000 }));
+      expect(messageServiceSpy.showError).toHaveBeenCalledWith('Authentication failed.');
     });
   });
 
