@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MessageService } from 'src/app/core/message/message.service';
 
 @Component({
   selector: 'app-signup',
@@ -13,7 +13,7 @@ export class SignupComponent implements OnInit {
 
   signupForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private snackBar: MatSnackBar) { }
+  constructor(private fb: FormBuilder, private http: HttpClient, private message: MessageService) { }
 
   ngOnInit() {
     this.signupForm = this.fb.group({
@@ -25,19 +25,11 @@ export class SignupComponent implements OnInit {
   }
 
   signup() {
-
-    let url = `${environment.baseUrl}signup`;
+    let url = `${environment.baseUrl}user`;
     this.http.post(url, this.signupForm.value).subscribe(
-      () => this.openSnackBar('Account created. Please log in.', 'Close'),
-      err => this.openSnackBar('Authentication failed.', 'Close')
+      () => this.message.showSuccess('Account created. Please log in.'),
+      err => this.message.showError('Account creation failed.')
     );
 
   }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
-    });
-  }
-
 }

@@ -42,7 +42,7 @@ public class UserController {
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/user")
     public void signup(@RequestBody UserDTO user, HttpServletResponse response) {
         userDAO.create(user);
         response.setStatus(HttpServletResponse.SC_CREATED);

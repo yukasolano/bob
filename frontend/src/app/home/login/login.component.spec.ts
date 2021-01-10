@@ -3,13 +3,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { LoginComponent } from './login.component';
-import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
-import { AuthService } from '../core/auth/auth.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { MaterialModule } from 'src/app/material.module';
+import { AuthService } from 'src/app/core/auth/auth.service';
 
 export const ButtonClickEvents = {
   left: { button: 0 }, right: { button: 2 }

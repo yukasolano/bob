@@ -1,0 +1,16 @@
+.login-page {
+  background: url("src/assets/img/open-book.jpeg");
+  width: 100%;
+  height: calc(100% - 64px);
+  position: absolute;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.login-card {
+  width: 30%;
+  min-width: 300px;
+  margin: auto;
+  top: 30%;
+  background-color: rgba(245, 245, 245, 0.9);
+}
