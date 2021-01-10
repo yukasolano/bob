@@ -31,7 +31,7 @@ public class UserController {
     private String secretKey;
 
     @PostMapping("/login")
-    public void login(@RequestBody UserDTO user,
+    public void login(@RequestBody UserLoginDTO user,
                       HttpServletResponse response) {
         if (!userDAO.isValid(user.getUsername(), user.getPassword())) {
             throw new RuntimeException("Invalid username and/or password");
@@ -40,6 +40,12 @@ public class UserController {
         String token = getJWTToken(user.getUsername());
         response.setHeader("Authorization", token);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
+    }
+
+    @PostMapping("/signup")
+    public void signup(@RequestBody UserDTO user, HttpServletResponse response) {
+        userDAO.create(user);
+        response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
     private String getJWTToken(String username) {
