@@ -1,3 +1,27 @@
-<p>
-  dashboard works!
-</p>
+<div class="dashboard">
+
+  <div class="statistics">
+    <p>statistics</p>
+  </div>
+  
+  <mat-card>
+    <mat-card-title>
+      Reading
+    </mat-card-title>
+    <app-book-table status="READING"></app-book-table>
+  </mat-card>
+  
+  <mat-card>
+    <mat-card-title>
+      To read
+    </mat-card-title>
+    <app-book-table status="NOT_READ"></app-book-table>
+  </mat-card>
+  
+  <mat-card>
+    <mat-card-title>
+      Done
+    </mat-card-title>
+    <app-book-table status="READ"></app-book-table>
+  </mat-card>
+</div>

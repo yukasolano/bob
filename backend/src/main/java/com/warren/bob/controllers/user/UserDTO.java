@@ -1,4 +1,4 @@
-package com.warren.bob.controllers;
+package com.warren.bob.controllers.user;
 
 import lombok.Getter;
 import lombok.Setter;

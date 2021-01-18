@@ -1,4 +1,4 @@
-package com.warren.bob.models;
+package com.warren.bob.models.user;
 
 import lombok.Getter;
 import lombok.Setter;

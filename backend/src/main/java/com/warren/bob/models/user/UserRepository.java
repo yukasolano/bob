@@ -1,4 +1,4 @@
-package com.warren.bob.models;
+package com.warren.bob.models.user;
 
 import org.springframework.data.repository.CrudRepository;
 

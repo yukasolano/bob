@@ -1,7 +1,7 @@
-package com.warren.bob.controllers;
+package com.warren.bob.controllers.user;
 
 
-import com.warren.bob.models.UserDAO;
+import com.warren.bob.models.user.UserDAO;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;

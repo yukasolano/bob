@@ -1,6 +1,6 @@
-package com.warren.bob.models;
+package com.warren.bob.models.user;
 
-import com.warren.bob.controllers.UserDTO;
+import com.warren.bob.controllers.user.UserDTO;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

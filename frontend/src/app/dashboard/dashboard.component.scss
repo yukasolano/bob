@@ -1,0 +1,22 @@
+.statistics,
+.mat-card {
+  margin: 10px 0px;
+  width: 45%;
+  box-sizing: border-box;
+}
+
+.dashboard {
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+@media (max-width: 950px) {
+  .statistics,
+  .mat-card {
+    margin: 10px 0px;
+    width: 90%;
+    box-sizing: border-box;
+  }
+}
