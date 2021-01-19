@@ -1,0 +1,41 @@
+<mat-card-title> Book </mat-card-title>
+<br />
+<mat-card-content>
+  <form [formGroup]="bookForm" (submit)="save()">
+
+    <mat-form-field class="field" appearance="outline">
+      <mat-label>Title</mat-label>
+      <input type="text" matInput formControlName="title" required />
+    </mat-form-field>
+
+    <mat-form-field class="field" appearance="outline">
+      <mat-label>Author</mat-label>
+      <input type="text" matInput formControlName="author" required />
+    </mat-form-field>
+
+    <mat-form-field class="field" appearance="outline">
+      <mat-label>Subject</mat-label>
+      <input type="text" matInput formControlName="subject" required />
+    </mat-form-field>
+    
+    <mat-form-field class="field" appearance="outline">
+      <mat-label>Publisher</mat-label>
+      <input type="text" matInput formControlName="publisher" required />
+    </mat-form-field>
+
+    <mat-form-field class="field" appearance="outline">
+      <mat-label>Pages</mat-label>
+      <input type="number" matInput formControlName="pages" required />
+    </mat-form-field>
+
+    <button
+      class="button"
+      mat-raised-button
+      [disabled]="bookForm.invalid"
+      type="submit"
+      color="primary"
+    >
+      Save
+    </button>
+  </form>
+</mat-card-content>

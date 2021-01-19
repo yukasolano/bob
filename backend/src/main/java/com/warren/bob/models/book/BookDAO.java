@@ -1,6 +1,7 @@
 package com.warren.bob.models.book;
 
 import com.warren.bob.controllers.book.BookActionDTO;
+import com.warren.bob.controllers.book.BookDTO;
 import com.warren.bob.controllers.book.BookListDTO;
 import org.springframework.stereotype.Component;
 
@@ -86,4 +87,60 @@ public class BookDAO {
         return false;
     }
 
+    public BookDTO getBook(Long id) {
+        Optional<BookEntity> entity = bookRepository.findById(id);
+        if(entity.isPresent()) {
+            BookDTO dto = new BookDTO();
+            dto.setId(entity.get().getId());
+            dto.setTitle(entity.get().getTitle());
+            dto.setAuthor(entity.get().getAuthor());
+            dto.setBookStatus(entity.get().getBookStatus());
+            dto.setPages(entity.get().getPages());
+            dto.setPublisher(entity.get().getPublisher());
+            dto.setSubject(entity.get().getSubject());
+            dto.setStartDate(entity.get().getStartDate());
+            dto.setEndDate(entity.get().getEndDate());
+            return dto;
+        }
+        //erro id not found
+        return null;
+    }
+
+    public void createBook(BookDTO dto) {
+        //tod verify if has id and if it exist
+        bookRepository.save(convert(dto));
+    }
+
+    public void updateBook(BookDTO dto) {
+        if(bookRepository.findById(dto.getId()).isPresent()) {
+            bookRepository.save(convert(dto));
+        }
+        //erro id does not exist
+    }
+
+    public void deleteBook(Long id) {
+        Optional<BookEntity> entity = bookRepository.findById(id);
+        if(entity.isPresent()) {
+            bookRepository.deleteById(id);
+        }
+        //erro id does not exist
+    }
+
+    private BookEntity convert(BookDTO dto) {
+
+        //validate dates
+        
+        BookEntity entity = new BookEntity();
+        entity.setId(dto.getId());
+        entity.setTitle(dto.getTitle());
+        entity.setAuthor(dto.getAuthor());
+        entity.setBookStatus(dto.getBookStatus());
+        entity.setPages(dto.getPages());
+        entity.setPublisher(dto.getPublisher());
+        entity.setSubject(dto.getPublisher());
+        entity.setSubject(dto.getSubject());
+        entity.setStartDate(dto.getStartDate());
+        entity.setEndDate(dto.getEndDate());
+        return entity;
+    }
 }

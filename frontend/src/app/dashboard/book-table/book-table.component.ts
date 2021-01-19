@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { BookListUpdateService } from './book-list-update.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-book-table',
@@ -21,7 +22,7 @@ export class BookTableComponent implements OnInit {
   displayedColumns: string[];
   dataSource = new MatTableDataSource();
 
-  constructor(private http: HttpClient, private update: BookListUpdateService) { }
+  constructor(private http: HttpClient, private update: BookListUpdateService, private router: Router) { }
 
   ngOnInit() {
     this.displayedColumns = ['title', 'details'];
@@ -51,8 +52,7 @@ export class BookTableComponent implements OnInit {
   }
 
   onDetails(element) {
-    console.log('show details of');
-    console.log(element);
+    this.router.navigate(['book', element.id]);
   }
 
   onStart(element) {
