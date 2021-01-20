@@ -87,9 +87,8 @@ public class BookDAO {
         }
 
         entity.setBookStatus(BookStatus.READ);
-        entity.setStartDate(dto.getDate());
-        bookRepository.save(opEntity.get());
-
+        entity.setEndDate(dto.getDate());
+        bookRepository.save(entity);
     }
 
     public BookDTO getBook(Long id) {

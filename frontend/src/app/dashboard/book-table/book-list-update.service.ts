@@ -26,7 +26,7 @@ export class BookListUpdateService {
 
     finishReading(id: number, date: Date) {
         const url = `${environment.baseUrl}book/finish`;
-        this.http.post(url, { id: id, date: date.toISOString() }).subscribe(
+        this.http.post(url, { id: id, date: date.toISOString().slice(0, 10) }).subscribe(
             () => {
                 //send notification to update table
                 this.notifyToUpdate.next(true);
