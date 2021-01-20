@@ -7,7 +7,8 @@ import { AuthGuard } from './core/auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './home/login/login.component';
 import { SignupComponent } from './home/signup/signup.component';
-import { EditBookComponent } from './dashboard/edit-book/edit-book.component';
+import { EditBookComponent } from './edit-book/edit-book.component';
+
 
 
 const routes: Routes = [

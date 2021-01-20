@@ -50,15 +50,11 @@ public class BookController {
 
     @PostMapping("/book/start")
     public void start(@RequestBody BookActionDTO dto) {
-        if(!bookDAO.startReading(dto)) {
-            throw new RuntimeException("Erro");
-        }
+        bookDAO.startReading(dto);
     }
 
     @PostMapping("/book/finish")
     public void finish(@RequestBody BookActionDTO dto) {
-        if(!bookDAO.finishReading(dto)) {
-            throw new RuntimeException("Erro");
-        }
+        bookDAO.finishReading(dto);
     }
 }

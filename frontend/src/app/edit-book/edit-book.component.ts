@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'src/app/core/message/message.service';
 
 @Component({
   selector: 'app-edit-book',
@@ -15,7 +16,12 @@ export class EditBookComponent implements OnInit {
 
   isNewBook = true;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private message: MessageService) { }
 
   ngOnInit() {
 
@@ -45,15 +51,21 @@ export class EditBookComponent implements OnInit {
     const url = `${environment.baseUrl}book`;
     if (this.isNewBook) {
       this.http.post(url, this.bookForm.value).subscribe(() => {
-        console.log('post');
+        this.message.showSuccess('Book created!');
+        this.router.navigate(['']);
       },
-        err => console.log(err));
+        err => this.message.showError(err));
     } else {
       this.http.put(url, this.bookForm.value).subscribe(() => {
-        console.log('put');
+        this.message.showSuccess('Book updated!');
+        this.router.navigate(['']);
       },
-        err => console.log(err));
+        err => this.message.showError(err));
     }
+  }
+
+  cancel() {
+    this.router.navigate(['']);
   }
 
 }

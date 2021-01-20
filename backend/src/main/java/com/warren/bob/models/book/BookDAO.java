@@ -3,9 +3,10 @@ package com.warren.bob.models.book;
 import com.warren.bob.controllers.book.BookActionDTO;
 import com.warren.bob.controllers.book.BookDTO;
 import com.warren.bob.controllers.book.BookListDTO;
+import com.warren.bob.models.InvalidParameterException;
+import com.warren.bob.models.RegisterNotFoundException;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,8 @@ public class BookDAO {
         createBook("Livro 4", BookStatus.NOT_READ);
     }
 
-    private void createBook(String name, BookStatus status) {
+    private void createBook(String name,
+                            BookStatus status) {
         BookEntity bookEntity = new BookEntity();
         bookEntity.setTitle(name);
         bookEntity.setBookStatus(status);
@@ -49,87 +51,107 @@ public class BookDAO {
         }).collect(Collectors.toList());
     }
 
-    public boolean startReading(BookActionDTO dto) {
-       Optional<BookEntity> entity = bookRepository.findById(dto.getId());
-       if(entity.isPresent()) {
-           if(entity.get().getBookStatus().equals(BookStatus.NOT_READ)) {
-               entity.get().setBookStatus(BookStatus.READING);
-               entity.get().setStartDate(dto.getDate());
-               bookRepository.save(entity.get());
-               return true;
-           }
-           //erro:  wrong state
-           return false;
-       }
-       //erro: id nao existe
-        return false;
+    public void startReading(BookActionDTO dto) {
+        Optional<BookEntity> opEntity = bookRepository.findById(dto.getId());
+
+        if (!opEntity.isPresent()) {
+            throw new RegisterNotFoundException(String.format("Book (%d) not found", dto.getId()));
+        }
+
+        BookEntity entity = opEntity.get();
+
+        if (!entity.getBookStatus().equals(BookStatus.NOT_READ)) {
+            throw new InvalidParameterException(String.format("Book %s (%d) should be on NOT_READ status", entity.getTitle(), entity.getId()));
+        }
+
+        entity.setBookStatus(BookStatus.READING);
+        entity.setStartDate(dto.getDate());
+        bookRepository.save(entity);
     }
 
-    public boolean finishReading(BookActionDTO dto) {
-        Optional<BookEntity> entity = bookRepository.findById(dto.getId());
-        if(entity.isPresent()) {
-            if(entity.get().getBookStatus().equals(BookStatus.READING)) {
-                entity.get().setBookStatus(BookStatus.READ);
+    public void finishReading(BookActionDTO dto) {
+        Optional<BookEntity> opEntity = bookRepository.findById(dto.getId());
 
-                if(entity.get().getStartDate() == null || entity.get().getStartDate().isAfter(dto.getDate())) {
-                    //erro: start date not exist or is after then finish date
-                    return false;
-                } else {
-                    entity.get().setStartDate(dto.getDate());
-                    bookRepository.save(entity.get());
-                    return true;
-                }
-            }
-            //erro:  wrong state
-            return false;
+        if (!opEntity.isPresent()) {
+            throw new RegisterNotFoundException(String.format("Book (%d) not found", dto.getId()));
         }
-        //erro: id nao existe
-        return false;
+
+        BookEntity entity = opEntity.get();
+
+        if (!entity.getBookStatus().equals(BookStatus.READING)) {
+            throw new InvalidParameterException(String.format("Book %s (%d) should be on READING status", entity.getTitle(), entity.getId()));
+        }
+
+        if (entity.getStartDate() == null || entity.getStartDate().isAfter(dto.getDate())) {
+            throw new InvalidParameterException(String.format("Book %s (%d) does not have a start date or it is after the finish date", entity.getTitle(), entity.getId()));
+        }
+
+        entity.setBookStatus(BookStatus.READ);
+        entity.setStartDate(dto.getDate());
+        bookRepository.save(opEntity.get());
+
     }
 
     public BookDTO getBook(Long id) {
-        Optional<BookEntity> entity = bookRepository.findById(id);
-        if(entity.isPresent()) {
-            BookDTO dto = new BookDTO();
-            dto.setId(entity.get().getId());
-            dto.setTitle(entity.get().getTitle());
-            dto.setAuthor(entity.get().getAuthor());
-            dto.setBookStatus(entity.get().getBookStatus());
-            dto.setPages(entity.get().getPages());
-            dto.setPublisher(entity.get().getPublisher());
-            dto.setSubject(entity.get().getSubject());
-            dto.setStartDate(entity.get().getStartDate());
-            dto.setEndDate(entity.get().getEndDate());
-            return dto;
+        Optional<BookEntity> opEntity = bookRepository.findById(id);
+
+        if (!opEntity.isPresent()) {
+            throw new RegisterNotFoundException(String.format("Book (%d) not found", id));
         }
-        //erro id not found
-        return null;
+
+        BookDTO dto = new BookDTO();
+        dto.setId(opEntity.get().getId());
+        dto.setTitle(opEntity.get().getTitle());
+        dto.setAuthor(opEntity.get().getAuthor());
+        dto.setBookStatus(opEntity.get().getBookStatus());
+        dto.setPages(opEntity.get().getPages());
+        dto.setPublisher(opEntity.get().getPublisher());
+        dto.setSubject(opEntity.get().getSubject());
+        dto.setStartDate(opEntity.get().getStartDate());
+        dto.setEndDate(opEntity.get().getEndDate());
+        return dto;
     }
 
     public void createBook(BookDTO dto) {
-        //tod verify if has id and if it exist
+        if (dto.getId() != null) {
+            throw new InvalidParameterException("Use PUT to update a book's information");
+        }
+
         bookRepository.save(convert(dto));
     }
 
     public void updateBook(BookDTO dto) {
-        if(bookRepository.findById(dto.getId()).isPresent()) {
-            bookRepository.save(convert(dto));
+        if (!bookRepository.findById(dto.getId()).isPresent()) {
+            throw new RegisterNotFoundException("Use POST to create a new book");
         }
-        //erro id does not exist
+        bookRepository.save(convert(dto));
     }
 
     public void deleteBook(Long id) {
-        Optional<BookEntity> entity = bookRepository.findById(id);
-        if(entity.isPresent()) {
-            bookRepository.deleteById(id);
+        Optional<BookEntity> opEntity = bookRepository.findById(id);
+
+        if (!opEntity.isPresent()) {
+            throw new RegisterNotFoundException(String.format("Book (%d) does not exist", id));
         }
-        //erro id does not exist
+
+        bookRepository.deleteById(id);
     }
 
     private BookEntity convert(BookDTO dto) {
 
-        //validate dates
-        
+        if (BookStatus.NOT_READ.equals(dto.getBookStatus()) && (dto.getStartDate() != null || dto.getEndDate() != null)) {
+            throw new InvalidParameterException("In a NOT_READ status, both dates must be null");
+        }
+
+        if (BookStatus.READING.equals(dto.getBookStatus()) && (dto.getStartDate() == null || dto.getEndDate() != null)) {
+            throw new InvalidParameterException("In a READING status, start date must be not null and end date must be null");
+        }
+
+        if (BookStatus.READ.equals(dto.getBookStatus()) && (dto.getStartDate() == null || dto.getEndDate() == null ||
+                dto.getStartDate().isAfter(dto.getEndDate()))) {
+            throw new InvalidParameterException("In a READ status, end date must be after or equal start date");
+        }
+
         BookEntity entity = new BookEntity();
         entity.setId(dto.getId());
         entity.setTitle(dto.getTitle());

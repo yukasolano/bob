@@ -32,6 +32,16 @@
       class="button"
       mat-raised-button
       [disabled]="bookForm.invalid"
+      type="button"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+
+    <button
+      class="button"
+      mat-raised-button
+      [disabled]="bookForm.invalid"
       type="submit"
       color="primary"
     >
