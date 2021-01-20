@@ -1,0 +1,40 @@
+.mat-card {
+  margin: 10vh auto;
+  width: 70%;
+}
+
+.mat-card-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.field {
+  box-sizing: border-box;
+}
+
+.field.title {
+  width: 100%;
+}
+
+.field.author {
+  width: 74%;
+}
+
+.field.pages {
+  width: 24%;
+}
+
+.field.publisher,
+.field.subject {
+  width: 49%;
+}
+
+.field.status,
+.field.date {
+  width: 32%;
+}
+
+.mat-card-actions {
+  margin-bottom: -8px;
+  padding-bottom: 0;
+}

@@ -68,4 +68,8 @@ export class EditBookComponent implements OnInit {
     this.router.navigate(['']);
   }
 
+  getCardTitle() {
+    return this.isNewBook ? "Create a new book to read" : "Update an existing book";
+  }
+
 }
