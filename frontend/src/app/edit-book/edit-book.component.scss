@@ -1,5 +1,5 @@
 .mat-card {
-  margin: 10vh auto;
+  margin: 10% auto;
   width: 70%;
 }
 
@@ -37,4 +37,20 @@
 .mat-card-actions {
   margin-bottom: -8px;
   padding-bottom: 0;
+}
+
+@media (max-width: 950px) {
+  .field.author,
+  .field.pages,
+  .field.publisher,
+  .field.subject,
+  .field.status,
+  .field.date {
+    width: 100%;
+  }
+
+  .mat-card {
+    margin: 5% auto;
+    width: 90%;
+  }
 }

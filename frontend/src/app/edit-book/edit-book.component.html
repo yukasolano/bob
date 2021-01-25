@@ -34,7 +34,7 @@
 
       <mat-form-field class="field status" appearance="outline">
         <mat-label>Status</mat-label>
-        <mat-select formControlName="bookStatus" required >
+        <mat-select formControlName="bookStatus" required (selectionChange)="onChangeStatus()">
           <mat-option value="NOT_READ">Not read</mat-option>
           <mat-option value="READING">Reading</mat-option>
           <mat-option value="READ">Read</mat-option>
@@ -43,14 +43,16 @@
 
       <mat-form-field class="field date" appearance="outline">
         <mat-label>Start date</mat-label>
-        <input matInput [matDatepicker]="startDate" formControlName="startDate">
+        <input matInput [matDatepicker]="startDate" formControlName="startDate" 
+        [max]="bookForm.get('endDate').value" [required]="fillStartDate()">
         <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
         <mat-datepicker #startDate></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field class="field date" appearance="outline">
         <mat-label>Finish date</mat-label>
-        <input matInput [matDatepicker]="finishDate" formControlName="endDate">
+        <input matInput [matDatepicker]="finishDate" formControlName="endDate" 
+        [min]="bookForm.get('startDate').value" [required]="fillEndDate()">
         <mat-datepicker-toggle matSuffix [for]="finishDate"></mat-datepicker-toggle>
         <mat-datepicker #finishDate></mat-datepicker>
       </mat-form-field>

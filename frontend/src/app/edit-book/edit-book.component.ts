@@ -43,6 +43,7 @@ export class EditBookComponent implements OnInit {
       const url = `${environment.baseUrl}book/${id}`;
       this.http.get(url).subscribe(resp => {
         this.bookForm.setValue(resp);
+        this.onChangeStatus();
       });
     }
   }
@@ -72,4 +73,28 @@ export class EditBookComponent implements OnInit {
     return this.isNewBook ? "Create a new book to read" : "Update an existing book";
   }
 
+  onChangeStatus() {
+    if (this.bookForm.get('bookStatus').value === 'NOT_READ') {
+      this.bookForm.get('startDate').reset();
+      this.bookForm.get('startDate').disable();
+      this.bookForm.get('endDate').reset();
+      this.bookForm.get('endDate').disable();
+    } else if (this.bookForm.get('bookStatus').value === 'READING') {
+      this.bookForm.get('startDate').enable();
+      this.bookForm.get('endDate').reset();
+      this.bookForm.get('endDate').disable();
+    } else if (this.bookForm.get('bookStatus').value === 'READ') {
+      this.bookForm.get('startDate').enable();
+      this.bookForm.get('endDate').enable();
+    }
+  }
+
+  fillStartDate() {
+    return this.bookForm.get('bookStatus').value === 'READING' ||
+      this.bookForm.get('bookStatus').value === 'READ';
+  }
+
+  fillEndDate() {
+    return this.bookForm.get('bookStatus').value === 'READ';
+  }
 }
