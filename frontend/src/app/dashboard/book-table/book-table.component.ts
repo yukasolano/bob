@@ -2,10 +2,9 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { BookListUpdateService } from './book-list-update.service';
+import { BookListUpdateService } from '../../services/book-list-update.service';
 import { Router } from '@angular/router';
+import { BookService } from 'src/app/services/book.service';
 
 @Component({
   selector: 'app-book-table',
@@ -22,7 +21,10 @@ export class BookTableComponent implements OnInit {
   displayedColumns: string[];
   dataSource = new MatTableDataSource();
 
-  constructor(private http: HttpClient, private update: BookListUpdateService, private router: Router) { }
+  constructor(
+    private update: BookListUpdateService,
+    private router: Router,
+    private bookService: BookService) { }
 
   ngOnInit() {
     this.displayedColumns = ['title', 'details'];
@@ -35,8 +37,7 @@ export class BookTableComponent implements OnInit {
   }
 
   updateTable() {
-    const url = `${environment.baseUrl}book?status=${this.status}`;
-    this.http.get<Object[]>(url).subscribe(resp => {
+    this.bookService.getByStatus(this.status).subscribe(resp => {
       this.dataSource = new MatTableDataSource(resp);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;

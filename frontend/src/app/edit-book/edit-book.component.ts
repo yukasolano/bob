@@ -1,9 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'src/app/core/message/message.service';
+import { BookService } from '../services/book.service';
 
 @Component({
   selector: 'app-edit-book',
@@ -13,15 +11,13 @@ import { MessageService } from 'src/app/core/message/message.service';
 export class EditBookComponent implements OnInit {
 
   bookForm: FormGroup;
-
   isNewBook = true;
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private message: MessageService) { }
+    private bookService: BookService) { }
 
   ngOnInit() {
 
@@ -40,8 +36,7 @@ export class EditBookComponent implements OnInit {
     const id = this.activatedRoute.snapshot.params.id;
     if (id) {
       this.isNewBook = false;
-      const url = `${environment.baseUrl}book/${id}`;
-      this.http.get(url).subscribe(resp => {
+      this.bookService.get(id).subscribe(resp => {
         this.bookForm.setValue(resp);
         this.onChangeStatus();
       });
@@ -49,19 +44,10 @@ export class EditBookComponent implements OnInit {
   }
 
   save() {
-    const url = `${environment.baseUrl}book`;
     if (this.isNewBook) {
-      this.http.post(url, this.bookForm.value).subscribe(() => {
-        this.message.showSuccess('Book created!');
-        this.router.navigate(['']);
-      },
-        err => this.message.showError(err));
+      this.bookService.create(this.bookForm.value);
     } else {
-      this.http.put(url, this.bookForm.value).subscribe(() => {
-        this.message.showSuccess('Book updated!');
-        this.router.navigate(['']);
-      },
-        err => this.message.showError(err));
+      this.bookService.update(this.bookForm.value);
     }
   }
 
@@ -74,27 +60,38 @@ export class EditBookComponent implements OnInit {
   }
 
   onChangeStatus() {
-    if (this.bookForm.get('bookStatus').value === 'NOT_READ') {
+    if (this.isNotRead()) {
       this.bookForm.get('startDate').reset();
       this.bookForm.get('startDate').disable();
       this.bookForm.get('endDate').reset();
       this.bookForm.get('endDate').disable();
-    } else if (this.bookForm.get('bookStatus').value === 'READING') {
+    } else if (this.isReading()) {
       this.bookForm.get('startDate').enable();
       this.bookForm.get('endDate').reset();
       this.bookForm.get('endDate').disable();
-    } else if (this.bookForm.get('bookStatus').value === 'READ') {
+    } else if (this.isRead()) {
       this.bookForm.get('startDate').enable();
       this.bookForm.get('endDate').enable();
     }
   }
 
   fillStartDate() {
-    return this.bookForm.get('bookStatus').value === 'READING' ||
-      this.bookForm.get('bookStatus').value === 'READ';
+    return this.isReading() || this.isRead();
   }
 
   fillEndDate() {
+    return this.isRead();
+  }
+
+  isNotRead() {
+    return this.bookForm.get('bookStatus').value === 'NOT_READ';
+  }
+
+  isReading() {
+    return this.bookForm.get('bookStatus').value === 'READING';
+  }
+
+  isRead() {
     return this.bookForm.get('bookStatus').value === 'READ';
   }
 }
