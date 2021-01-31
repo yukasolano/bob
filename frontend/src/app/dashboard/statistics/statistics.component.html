@@ -1,0 +1,23 @@
+<div class="stats">
+  <p>
+    {{stats.booksRead}}
+  </p>
+  <legend>Books read</legend>
+</div>
+
+<div class="sub">
+  <div class="stats">
+    <p>
+      {{stats.booksPerMonth | number: '1.0-2'}}
+    </p>
+    <legend>Books/month</legend>
+  </div>
+  
+  <div class="stats">
+    <p>
+      {{stats.pagesPerDay | number: '1.0-0'}}
+    </p>
+    <legend>Pages/day</legend>
+  </div>
+</div>
+

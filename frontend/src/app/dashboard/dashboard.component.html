@@ -1,10 +1,14 @@
 <div class="dashboard">
-
-  <div class="statistics">
-    <p>statistics</p>
-    <button mat-raised-button [routerLink]="['book']">Add a new book</button>
-  </div>
   
+  <mat-card>
+    <mat-card-content>
+      <app-statistics></app-statistics>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button [routerLink]="['book']">Add a new book</button>
+    </mat-card-actions>
+  </mat-card>
+
   <mat-card>
     <mat-card-title>
       Reading

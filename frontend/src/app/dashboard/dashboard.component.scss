@@ -1,22 +1,44 @@
-.statistics,
 .mat-card {
   margin: 10px 0px;
   width: 45%;
   box-sizing: border-box;
+  background-color: rgba(245, 245, 245, 0.9);
 }
 
 .dashboard {
-  margin: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  background: url("src/assets/img/open-book.jpeg");
+  width: 100%;
+  height: calc(100% - 64px);
+  position: absolute;
+  background-position: center;
+  background-repeat: repeat;
+  background-color: #977d86;
+}
+
+.mat-card-actions {
+  bottom: 20px;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+
+.mat-card-actions button {
+  font-size: 20px;
+  line-height: 45px;
 }
 
 @media (max-width: 950px) {
-  .statistics,
   .mat-card {
     margin: 10px 0px;
     width: 90%;
     box-sizing: border-box;
+  }
+
+  .mat-card-actions {
+    bottom: 0px;
+    position: relative;
   }
 }
