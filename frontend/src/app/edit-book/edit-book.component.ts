@@ -33,6 +33,7 @@ export class EditBookComponent implements OnInit {
       endDate: ['']
     });
 
+    this.onChangeStatus();
     const id = this.activatedRoute.snapshot.params.id;
     if (id) {
       this.isNewBook = false;

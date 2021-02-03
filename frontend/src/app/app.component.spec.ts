@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { EditBookModule } from './edit-book/edit-book.module';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -12,7 +13,8 @@ describe('AppComponent', () => {
         RouterTestingModule,
         CoreModule,
         HomeModule,
-        DashboardModule
+        DashboardModule,
+        EditBookModule
       ],
       declarations: [
         AppComponent
