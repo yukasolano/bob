@@ -11,6 +11,7 @@ import { CoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { EditBookModule } from './edit-book/edit-book.module';
+import { JwtInterceptorModule } from './core/auth/jwt.interceptor.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { EditBookModule } from './edit-book/edit-book.module';
     CoreModule,
     HomeModule,
     DashboardModule,
-    EditBookModule
+    EditBookModule,
+    JwtInterceptorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

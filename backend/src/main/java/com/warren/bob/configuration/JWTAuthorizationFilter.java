@@ -24,7 +24,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     private final String HEADER = "Authorization";
 
     @Value("${bob.secret}")
-    private String secretKey;
+    private String secretKey = "mySecretKey123456789mySecretKey123456789mySecretKey123456789mySecretKey123456789mySecretKey123456789mySecretKey123456789";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
@@ -49,7 +49,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     private Claims validateToken(HttpServletRequest request) {
         String jwtToken = request.getHeader(HEADER);
-        return Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(jwtToken).getBody();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken).getBody();
     }
 
     /**

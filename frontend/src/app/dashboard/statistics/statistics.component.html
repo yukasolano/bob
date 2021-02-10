@@ -1,6 +1,6 @@
 <div class="stats">
   <p id="booksRead">
-    {{stats.booksRead}}
+    {{stats?.booksRead}}
   </p>
   <legend>Books read</legend>
 </div>
@@ -8,14 +8,14 @@
 <div class="sub">
   <div class="stats">
     <p id="booksPerMonth">
-      {{stats.booksPerMonth | number: '1.0-2'}}
+      {{stats?.booksPerMonth | number: '1.0-2'}}
     </p>
     <legend>Books/month</legend>
   </div>
   
   <div class="stats">
     <p id="pagesPerDay">
-      {{stats.pagesPerDay | number: '1.0-0'}}
+      {{stats?.pagesPerDay | number: '1.0-0'}}
     </p>
     <legend>Pages/day</legend>
   </div>
