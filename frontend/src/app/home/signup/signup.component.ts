@@ -25,7 +25,7 @@ export class SignupComponent implements OnInit {
   }
 
   signup() {
-    let url = `${environment.baseUrl}user`;
+    let url = `${environment.baseUrl}auth/user`;
     this.http.post(url, this.signupForm.value).subscribe(
       () => this.message.showSuccess('Account created. Please log in.'),
       err => this.message.showError('Account creation failed.')

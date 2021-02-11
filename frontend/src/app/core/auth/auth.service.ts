@@ -11,7 +11,7 @@ export class AuthService {
     constructor(private http: HttpClient, private userService: UserService) { }
 
     authenticate(username: string, password: string) {
-        let url = `${environment.baseUrl}login`;
+        let url = `${environment.baseUrl}auth/login`;
         return this.http.post<Observable<boolean>>(url, {
             username: username,
             password: password
