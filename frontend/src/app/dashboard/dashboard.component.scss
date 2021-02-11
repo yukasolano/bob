@@ -9,18 +9,13 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  background: url("src/assets/img/open-book.jpeg");
-  width: 100%;
-  height: calc(100% - 64px);
   position: absolute;
-  background-position: center;
-  background-repeat: repeat;
-  background-color: #977d86;
+  width: 100%;
 }
 
 .mat-card-actions {
   bottom: 20px;
-  position: absolute;
+  position: static;
   width: 100%;
   text-align: center;
 }
@@ -34,11 +29,9 @@
   .mat-card {
     margin: 10px 0px;
     width: 90%;
-    box-sizing: border-box;
   }
 
   .mat-card-actions {
     bottom: 0px;
-    position: relative;
   }
 }
