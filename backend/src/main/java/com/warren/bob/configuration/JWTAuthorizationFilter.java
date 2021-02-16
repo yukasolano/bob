@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
-    private final String HEADER = "Authorization";
+    public static final String HEADER = "Authorization";
 
     private String secretKey;
 

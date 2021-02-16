@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.warren.bob.configuration.JWTAuthorizationFilter.HEADER;
+
 @RestController()
 @RequestMapping("/api/auth/")
 @CrossOrigin
@@ -38,12 +40,13 @@ public class UserController {
         }
 
         String token = getJWTToken(user.getUsername());
-        response.setHeader("Authorization", token);
-        response.setHeader("Access-Control-Expose-Headers", "Authorization");
+        response.setHeader(HEADER, token);
+        response.setHeader("Access-Control-Expose-Headers", HEADER);
     }
 
     @PostMapping("/user")
-    public void signup(@RequestBody UserDTO user, HttpServletResponse response) {
+    public void signup(@RequestBody UserDTO user,
+                       HttpServletResponse response) {
         userDAO.create(user);
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
