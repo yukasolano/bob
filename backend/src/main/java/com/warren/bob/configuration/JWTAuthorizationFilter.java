@@ -5,7 +5,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,11 +22,17 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     private final String HEADER = "Authorization";
 
-    @Value("${bob.secret}")
-    private String secretKey = "mySecretKey123456789mySecretKey123456789mySecretKey123456789mySecretKey123456789mySecretKey123456789mySecretKey123456789";
+    private String secretKey;
+
+    public JWTAuthorizationFilter(String secretKey) {
+        super();
+        this.secretKey = secretKey;
+    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain) throws ServletException, IOException {
         try {
             if (checkJWTToken(request, response)) {
                 Claims claims = validateToken(request);
@@ -36,7 +41,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 } else {
                     SecurityContextHolder.clearContext();
                 }
-            }else {
+            } else {
                 SecurityContextHolder.clearContext();
             }
             chain.doFilter(request, response);
@@ -67,7 +72,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     }
 
-    private boolean checkJWTToken(HttpServletRequest request, HttpServletResponse res) {
+    private boolean checkJWTToken(HttpServletRequest request,
+                                  HttpServletResponse res) {
         String authenticationHeader = request.getHeader(HEADER);
         if (authenticationHeader == null)
             return false;
