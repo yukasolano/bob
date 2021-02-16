@@ -13,7 +13,8 @@ public class BasicAuthConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll().anyRequest().authenticated();
+                .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class).authorizeRequests()
+                .antMatchers("/api/auth/**", "/", "/assets/**", "/*.css", "/*.js", "/*.ico", "/*.jpeg", "/home/**")
+                .permitAll().anyRequest().authenticated();
     }
 }

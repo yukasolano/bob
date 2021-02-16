@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
     const password = this.loginForm.get('password').value;
 
     this.authService.authenticate(username, password).subscribe(
-      () => this.router.navigate(['']),
+      () => this.router.navigate(['/']),
       err => this.message.showError('Authentication failed.')
     );
   }

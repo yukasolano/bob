@@ -2,7 +2,7 @@
   <span class="title">{{ title }}</span>
   <span class="spacer"></span>
 
-  <div *ngIf="user$ | async as user; else login">
+  <div *ngIf="user$ | async as user">
     <button mat-button [matMenuTriggerFor]="usermenu">
       <mat-icon>account_circle</mat-icon>
       <span class="username">{{ user.sub }}</span>
