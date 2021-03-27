@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
     List<UserEntity> findFirstByUsernameAndPassword(String username, String password);
+    List<UserEntity> findByUsername(String username);
 }

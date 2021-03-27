@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { MessageService } from 'src/app/core/message/message.service';
+import { SignupService } from 'src/app/services/signup.service';
+import { UsernameNotTakenValidator } from '../validators/username-not-taken.validator';
 
 @Component({
   selector: 'app-signup',
@@ -13,23 +12,18 @@ export class SignupComponent implements OnInit {
 
   signupForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private message: MessageService) { }
+  constructor(private fb: FormBuilder, private signupService: SignupService, private usernameNotTakenValidator: UsernameNotTakenValidator) { }
 
   ngOnInit() {
     this.signupForm = this.fb.group({
       name: ['', Validators.required],
-      username: ['', Validators.required],
+      username: ['', Validators.required, this.usernameNotTakenValidator.checkUsernameTaken()],
       password: ['', Validators.required],
       email: ['', Validators.required]
     });
   }
 
   signup() {
-    let url = `${environment.baseUrl}auth/user`;
-    this.http.post(url, this.signupForm.value).subscribe(
-      () => this.message.showSuccess('Account created. Please log in.'),
-      err => this.message.showError('Account creation failed.')
-    );
-
+    this.signupService.createUser(this.signupForm.value);
   }
 }

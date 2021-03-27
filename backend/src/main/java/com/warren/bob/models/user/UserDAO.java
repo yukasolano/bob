@@ -18,6 +18,11 @@ public class UserDAO {
         return user != null && !user.isEmpty();
     }
 
+    public boolean isTaken(String username) {
+        List<UserEntity> user = userRepository.findByUsername(username);
+        return user != null && !user.isEmpty();
+    }
+
     public void create(UserDTO user) {
         UserEntity entity = new UserEntity();
         entity.setName(user.getName());
