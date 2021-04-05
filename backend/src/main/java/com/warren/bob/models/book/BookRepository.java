@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BookRepository extends CrudRepository<BookEntity, Long> {
 
-    List<BookEntity> findAllByBookStatus(BookStatus status);
+    List<BookEntity> findAllByBookStatusAndUsername(BookStatus status, String username);
 
-    List<BookEntity> findAllByBookStatusAndEndDateBetween(BookStatus status, LocalDate start, LocalDate end);
+    List<BookEntity> findAllByBookStatusAndUsernameAndEndDateBetween(BookStatus status, String username, LocalDate start, LocalDate end);
 }

@@ -3,6 +3,7 @@ package com.warren.bob.controllers.statistics;
 import com.warren.bob.models.book.BookEntity;
 import com.warren.bob.models.book.BookRepository;
 import com.warren.bob.models.book.BookStatus;
+import com.warren.bob.models.user.LoggedUser;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -18,7 +19,7 @@ public class StatisticsActor {
 
     public StatisticsDTO compute(LocalDate data) {
 
-        List<BookEntity> books = bookRepository.findAllByBookStatusAndEndDateBetween(BookStatus.READ, data.minusYears(1), data);
+        List<BookEntity> books = bookRepository.findAllByBookStatusAndUsernameAndEndDateBetween(BookStatus.READ, LoggedUser.getUsername(),data.minusYears(1), data);
 
         StatisticsDTO dto = new StatisticsDTO();
 

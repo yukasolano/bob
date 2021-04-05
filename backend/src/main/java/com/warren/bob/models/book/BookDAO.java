@@ -5,6 +5,7 @@ import com.warren.bob.controllers.book.BookDTO;
 import com.warren.bob.controllers.book.BookListDTO;
 import com.warren.bob.models.InvalidParameterException;
 import com.warren.bob.models.RegisterNotFoundException;
+import com.warren.bob.models.user.LoggedUser;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,29 +21,14 @@ public class BookDAO {
     @Resource
     private BookRepository bookRepository;
 
-    //@PostConstruct
-    private void generateData() {
-        createBook("Livro 1", BookStatus.NOT_READ);
-        createBook("Livro 2", BookStatus.NOT_READ);
-        createBook("Livro 3", BookStatus.NOT_READ);
-        createBook("Livro 4", BookStatus.NOT_READ);
-    }
-
-    private void createBook(String name,
-                            BookStatus status) {
-        BookEntity bookEntity = new BookEntity();
-        bookEntity.setTitle(name);
-        bookEntity.setBookStatus(status);
-        bookRepository.save(bookEntity);
-    }
-
     public List<BookListDTO> getBooksByStatus(String status) {
 
         BookStatus bookStatus = BookStatus.valueOf(status);
         if (bookStatus == null) {
             return Collections.emptyList();
         }
-        return bookRepository.findAllByBookStatus(bookStatus).stream().map(it -> {
+
+        return bookRepository.findAllByBookStatusAndUsername(bookStatus, LoggedUser.getUsername()).stream().map(it -> {
             BookListDTO dto = new BookListDTO();
             dto.setId(it.getId());
             dto.setTitle(it.getTitle());
@@ -162,6 +148,7 @@ public class BookDAO {
         entity.setSubject(dto.getSubject());
         entity.setStartDate(dto.getStartDate());
         entity.setEndDate(dto.getEndDate());
+        entity.setUsername(LoggedUser.getUsername());
         return entity;
     }
 }

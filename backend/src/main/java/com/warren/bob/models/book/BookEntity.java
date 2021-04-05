@@ -33,4 +33,6 @@ public class BookEntity {
     private String publisher;
 
     private String subject;
+
+    private String username;
 }
