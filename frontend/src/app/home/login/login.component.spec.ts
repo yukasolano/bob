@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { render , fireEvent, waitForElement, waitForDomChange, getByText} from '@testing-library/angular'
+import { render , fireEvent, getByText, waitFor, screen} from '@testing-library/angular'
 
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -25,36 +25,51 @@ export function loginWith(fixture: ComponentFixture<LoginComponent>, username: s
   fixture.detectChanges();
 }
 
-describe('LoginComponent By testing library', () => {
-  let authServiceSpy;
-  let messageServiceSpy;
+describe('LoginComponent By testing library',  async() => {
+  const authServiceSpy = jasmine.createSpyObj('AuthService', ['authenticate']);
+  const messageServiceSpy = jasmine.createSpyObj('MessageService', ['showError']);
 
-  it('should login succesfully', async () => {
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['authenticate']);
-    messageServiceSpy = jasmine.createSpyObj('MessageService', ['showError']);
+  const component = await render(LoginComponent, {
+    imports: [ MaterialModule,
+      ReactiveFormsModule,
+      NoopAnimationsModule,
+      RouterTestingModule,
+    ],providers: [
+      { provide: AuthService, useValue: authServiceSpy },
+      { provide: MessageService, useValue: messageServiceSpy },
+    ]
+  })
+
+  it('should login succesfully', async() => {
     let authenticate = authServiceSpy.authenticate.and.returnValue(of(null));
-    const component = await render(LoginComponent, {
-      imports: [ MaterialModule,
-        ReactiveFormsModule,
-        NoopAnimationsModule,
-        RouterTestingModule,
-      ],providers: [
-        { provide: AuthService, useValue: authServiceSpy },
-        { provide: MessageService, useValue: messageServiceSpy },
-      ]
-    })
+
+    fireEvent.click(component.getByText('Login'))
+    expect(authenticate).not.toHaveBeenCalled();
 
     const username = component.getByLabelText(/username/i);
-    fireEvent.input(username, {target: {value: 'username'}})
+    fireEvent.input(username, {target: {value: 'myname'}})
 
     const password = component.getByLabelText(/password/i);
-    fireEvent.input(password, {target: {value: 'password'}})
+    fireEvent.input(password, {target: {value: 'mypassword'}})
+
     fireEvent.click(component.getByText('Login'))
 
-   // await waitFor(() => expect(authenticate).toHaveBeenCalledWith('username', 'password'));
-   // await waitForElement(() => getByText(/username/i))
-    
+    expect(authenticate).toHaveBeenCalledWith('myname', 'mypassword');
   })
+
+  it('should show error message', async() => {
+    let authenticate = authServiceSpy.authenticate.and.returnValue(throwError('Error'));
+
+    const username = component.getByLabelText(/username/i);
+    fireEvent.input(username, {target: {value: 'myname'}})
+
+    const password = component.getByLabelText(/password/i);
+    fireEvent.input(password, {target: {value: 'mypassword'}})
+
+    fireEvent.click(component.getByText('Login'))
+
+    expect(messageServiceSpy.showError).toHaveBeenCalledWith('Authentication failed.');
+  });
 
 })
 
