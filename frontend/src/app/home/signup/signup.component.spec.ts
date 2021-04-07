@@ -1,18 +1,14 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { SignupComponent } from './signup.component';
 import { MaterialModule } from 'src/app/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { environment } from 'src/environments/environment';
-import { MessageService } from 'src/app/core/message/message.service';
 import { setInput, click } from 'src/testing/utilities';
+import { SignupService } from 'src/app/services/signup.service';
 
 
 
@@ -23,6 +19,7 @@ export function signupWith(fixture: ComponentFixture<SignupComponent>, username:
   setInput(loginElem, 'input[formControlName=password]', password);
   setInput(loginElem, 'input[formControlName=email]', email);
   setInput(loginElem, 'input[formControlName=name]', name);
+  tick();
   fixture.detectChanges();
 
   click(loginElem.querySelector('.login-button'));
@@ -33,13 +30,12 @@ export function signupWith(fixture: ComponentFixture<SignupComponent>, username:
 describe('SignupComponent', () => {
   let component: SignupComponent;
   let fixture: ComponentFixture<SignupComponent>;
-  let httpClientSpy;
-  let messageServiceSpy;
-  let post;
+  let signupServiceSpy;
+  let createUser;
+  let usernameTaken
 
   beforeEach(async(() => {
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['post']);
-    messageServiceSpy = jasmine.createSpyObj('MessageService', ['showSuccess']);
+    signupServiceSpy = jasmine.createSpyObj('SignupService', ['createUser', 'isUsernameTaken']);
     TestBed.configureTestingModule({
       declarations: [SignupComponent],
       imports: [
@@ -49,15 +45,15 @@ describe('SignupComponent', () => {
         NoopAnimationsModule
       ],
       providers: [
-        { provide: HttpClient, useValue: httpClientSpy },
-        { provide: MessageService, useValue: messageServiceSpy }
+        { provide: SignupService, useValue: signupServiceSpy }
       ]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    post = httpClientSpy.post.and.returnValue(of(null));
+    createUser = signupServiceSpy.createUser.and.returnValue(of(null));
+    usernameTaken = signupServiceSpy.isUsernameTaken.and.returnValue(of(false));
     fixture = TestBed.createComponent(SignupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -67,14 +63,23 @@ describe('SignupComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should signup', () => {
+  it('should signup', fakeAsync(() => {
     const username = 'bob';
     const password = 'pass-bob';
     const email = 'bob@email.com';
     const name = 'Bob';
-    let url = `${environment.baseUrl}user`;
-    signupWith(fixture, username, password, email, name);
-    expect(post).toHaveBeenCalledWith(url, { username, password, email, name });
-    expect(messageServiceSpy.showSuccess).toHaveBeenCalledWith('Account created. Please log in.');
-  });
+    const loginElem = fixture.debugElement.nativeElement;
+
+    setInput(loginElem, 'input[formControlName=username]', username);
+    setInput(loginElem, 'input[formControlName=password]', password);
+    setInput(loginElem, 'input[formControlName=email]', email);
+    setInput(loginElem, 'input[formControlName=name]', name);
+    tick();
+    fixture.detectChanges();
+
+    click(loginElem.querySelector('.login-button'));
+    tick();
+    fixture.detectChanges();
+    expect(createUser).toHaveBeenCalledWith({ username, password, email, name });
+  }));
 });

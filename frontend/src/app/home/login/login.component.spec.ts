@@ -1,6 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { render , fireEvent, waitForElement, waitForDomChange, getByText} from '@testing-library/angular'
 
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +12,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { MessageService } from 'src/app/core/message/message.service';
 import { setInput, click } from 'src/testing/utilities';
+import { RouterTestingModule } from '@angular/router/testing';
 
 export function loginWith(fixture: ComponentFixture<LoginComponent>, username: string, password: string) {
   const loginElem = fixture.debugElement.nativeElement;
@@ -22,6 +24,39 @@ export function loginWith(fixture: ComponentFixture<LoginComponent>, username: s
   click(loginElem.querySelector('.login-button'));
   fixture.detectChanges();
 }
+
+describe('LoginComponent By testing library', () => {
+  let authServiceSpy;
+  let messageServiceSpy;
+
+  it('should login succesfully', async () => {
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['authenticate']);
+    messageServiceSpy = jasmine.createSpyObj('MessageService', ['showError']);
+    let authenticate = authServiceSpy.authenticate.and.returnValue(of(null));
+    const component = await render(LoginComponent, {
+      imports: [ MaterialModule,
+        ReactiveFormsModule,
+        NoopAnimationsModule,
+        RouterTestingModule,
+      ],providers: [
+        { provide: AuthService, useValue: authServiceSpy },
+        { provide: MessageService, useValue: messageServiceSpy },
+      ]
+    })
+
+    const username = component.getByLabelText(/username/i);
+    fireEvent.input(username, {target: {value: 'username'}})
+
+    const password = component.getByLabelText(/password/i);
+    fireEvent.input(password, {target: {value: 'password'}})
+    fireEvent.click(component.getByText('Login'))
+
+   // await waitFor(() => expect(authenticate).toHaveBeenCalledWith('username', 'password'));
+   // await waitForElement(() => getByText(/username/i))
+    
+  })
+
+})
 
 describe('LoginComponent', () => {
   let component: LoginComponent;

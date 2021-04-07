@@ -4,7 +4,7 @@
   <form [formGroup]="loginForm" (submit)="login()">
 
     <mat-form-field class="login-field" appearance="outline">
-      <mat-label>User name</mat-label>
+      <mat-label>Username</mat-label>
       <input type="text" matInput formControlName="username" required />
       <mat-icon matSuffix>person</mat-icon>
       <mat-error *ngIf="loginForm.get('username').errors?.required">
