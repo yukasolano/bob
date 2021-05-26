@@ -1,0 +1,36 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title> {{getCardTitle()}} </mat-card-title>
+    </mat-card-header>
+    <form [formGroup]="bookForm" (submit)="save()">
+    <mat-card-content>
+        
+        <mat-form-field class="example-full-width">
+            <mat-label>Title</mat-label>
+            <input type="text"
+                   placeholder="Choose a book"
+                   aria-label="Title"
+                   matInput
+                   formControlName="title"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option}}
+              </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+  
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button class="button" mat-button type="button" (click)="cancel()">
+        Cancel
+      </button>
+  
+      <button class="button" mat-raised-button [disabled]="bookForm.invalid" type="submit"
+        color="primary">
+        Save
+      </button>
+    </mat-card-actions>
+  </form>
+  </mat-card>

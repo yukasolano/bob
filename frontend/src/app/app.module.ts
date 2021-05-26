@@ -12,6 +12,7 @@ import { HomeModule } from './home/home.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { EditBookModule } from './edit-book/edit-book.module';
 import { InterceptorModule } from './core/interceptors/interceptor.module';
+import { SearchBookModule } from './dashboard/search-book/search-book.module';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { InterceptorModule } from './core/interceptors/interceptor.module';
     HomeModule,
     DashboardModule,
     EditBookModule,
-    InterceptorModule
+    InterceptorModule,
+    SearchBookModule
   ],
   providers: [],
   bootstrap: [AppComponent]

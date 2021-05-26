@@ -40,4 +40,8 @@ export class BookService {
             err => this.message.showError(err)
         );
     }
+
+    getTitles() {
+        return this.http.get(`${this.url}/titles`);
+    }
 }

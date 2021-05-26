@@ -21,6 +21,8 @@ export class BookTableComponent implements OnInit {
   displayedColumns: string[];
   dataSource = new MatTableDataSource();
 
+  titles
+
   constructor(
     private update: BookListUpdateService,
     private router: Router,
@@ -34,6 +36,8 @@ export class BookTableComponent implements OnInit {
     this.update.getObservable().subscribe(() => {
       this.updateTable();
     });
+
+    this.titles = this.bookService.getTitles();
   }
 
   updateTable() {

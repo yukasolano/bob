@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './home/login/login.component';
 import { SignupComponent } from './home/signup/signup.component';
 import { EditBookComponent } from './edit-book/edit-book.component';
+import { SearchBookComponent } from './dashboard/search-book/search-book.component';
 
 
 
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'book/:id', component: EditBookComponent, canActivate: [AuthGuard] },
   { path: 'book', component: EditBookComponent, canActivate: [AuthGuard] },
+  { path: 'search', component: SearchBookComponent, canActivate: [AuthGuard] },
   {
     path: 'home', component: HomeComponent,
     children: [
